@@ -53,27 +53,59 @@ func loadFakeConfig(sopsEncFile string) (*fakeConfig, error) {
 
 func TestLoadFakeJSONConfig(t *testing.T) {
 	rawJSON := `{
-	"FieldA": 123,
-	"FieldB": "abc",
-	"FieldC: {
-		"FieldD": 1.23,
-		"FieldE": "2022-07-04T08:10:21.52Z"
-	}
+    "FieldA": 123,
+    "FieldB": "abc",
+    "FieldC": {
+        "FieldD": 1.23,
+        "FieldE": "2022-07-04T08:10:21.52Z"
+    }
 }`
 
 	sopsCfg := EncryptJSON(t, rawJSON)
-	t.SetEnv("SOPS_AGE_KEY_FILE", sopsCfg.KeyPath)
-	got := loadFakeConfig(sopsCfg.EncryptedContentsPath)
+	t.Setenv("SOPS_AGE_KEY_FILE", sopsCfg.KeyPath)
+	got, err := loadFakeConfig(sopsCfg.EncryptedContentsPath)
+	if err != nil {
+		t.Fatalf("loadFakeConfig: %v", err)
+	}
 	want := &fakeConfig{
 		FieldA: 123,
 		FieldB: "abc",
 		FieldC: fakeSubConfig{
 			FieldD: 1.23,
-			FieldE: time.Unix(12345, 0),
+			FieldE: time.Unix(1656922221, 520000000).UTC(),
 		},
 	}
 
 	if diff := cmp.Diff(want, got); diff != "" {
-		t.Errorf("unexpected config returned: %v", err)
+		t.Errorf("unexpected config returned (-want +got)\n%s", diff)
+	}
+}
+
+func TestLoadFakeYAMLConfig(t *testing.T) {
+	rawYAML := `
+fielda: 123
+fieldb: "abc"
+fieldc:
+  fieldd: 1.23
+  fielde: "2022-07-04T08:10:21.52Z"
+`
+
+	sopsCfg := EncryptYAML(t, rawYAML)
+	t.Setenv("SOPS_AGE_KEY_FILE", sopsCfg.KeyPath)
+	got, err := loadFakeConfig(sopsCfg.EncryptedContentsPath)
+	if err != nil {
+		t.Fatalf("loadFakeConfig: %v", err)
+	}
+	want := &fakeConfig{
+		FieldA: 123,
+		FieldB: "abc",
+		FieldC: fakeSubConfig{
+			FieldD: 1.23,
+			FieldE: time.Unix(1656922221, 520000000).UTC(),
+		},
+	}
+
+	if diff := cmp.Diff(want, got); diff != "" {
+		t.Errorf("unexpected config returned (-want +got)\n%s", diff)
 	}
 }

@@ -1,3 +1,5 @@
+// Package testsops is a package for testing the functionality of tooling that
+// decrypts SOPS-encrypted data.
 package testsops
 
 import (
@@ -44,7 +46,7 @@ func EncryptFile(t *testing.T, fn string, opts ...Option) Config {
 
 	dat, err := ioutil.ReadFile(fn)
 	if err != nil {
-		t.Fatalf("failed to read file %q for encryption: %v", err)
+		t.Fatalf("failed to read file %q for encryption: %v", fn, err)
 	}
 	return generateEncryptedConfig(t, string(dat), ext, opts...)
 }
@@ -107,7 +109,7 @@ func generateEncryptedConfig(t *testing.T, contents, ext string, opts ...Option)
 
 	// There's no sops library to do encryption, only decryption, so we have to
 	// shell out to Sops for our test encryption.
-	cmd := exec.Command(sopsPath, "--encrypt", "--age", identity.Recipient().String())
+	cmd := exec.Command(sopsPath, "--encrypt", "--input-type", ext, "--age", identity.Recipient().String(), "/dev/stdin")
 	cmd.Stdin = strings.NewReader(contents)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = f
