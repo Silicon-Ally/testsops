@@ -6,6 +6,7 @@ mission](https://siliconally.org/policies/open-source/)!_
 # testsops
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/Silicon-Ally/testsops?status.svg)](https://pkg.go.dev/github.com/Silicon-Ally/testsops?tab=doc)
+[![CI Workflow](https://github.com/Silicon-Ally/testsops/actions/workflows/test.yml/badge.svg)](https://github.com/Silicon-Ally/testsops/actions?query=branch%3Amain)
 
 `testsops` is a simple package for testing libraries that use [Mozilla's
 sops](https://github.com/mozilla/sops) tool for encryption. Specifically, this
