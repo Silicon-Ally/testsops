@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      
+    - name: Install sops
+      run: |
+        mkdir -p "${GITHUB_WORKSPACE}/bin/"
+        curl -LO "https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64" -o "${GITHUB_WORKSPACE}/bin/sops"
+        chmod +x "${GITHUB_WORKSPACE}/bin/sops"
 
     - name: Set up Go
       uses: actions/setup-go@v3
