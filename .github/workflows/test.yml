@@ -11,6 +11,7 @@ jobs:
       
     - name: Install sops
       run: |
+        echo "$PATH"
         mkdir -p "${GITHUB_WORKSPACE}/bin/"
         curl -L "https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64" -o "${GITHUB_WORKSPACE}/bin/sops"
         chmod +x "${GITHUB_WORKSPACE}/bin/sops"
