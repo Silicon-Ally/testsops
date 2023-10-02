@@ -22,3 +22,8 @@ but that's impractical for local testing. However, `sops` also supports GPG +
 `testsops`. When a file is requested a be encrypted, a new `age` identity is
 created and used to encrypt the file. To decrypt, the client points `sops` at
 the `age` `key.txt` file via the `SOPS_AGE_KEY_FILE` env var.
+
+## Contributing
+
+Contribution guidelines can be found [on our website](https://siliconally.org/oss/contributor-guidelines).
+
